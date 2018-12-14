@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 
 @RequestMapping("/rest/url")
-@RestControllerAdvice
-
+@RestController
 public class UrlShortenerResource {
     @Autowired
     StringRedisTemplate redisTemplate;
@@ -23,18 +22,18 @@ public class UrlShortenerResource {
 
     @PostMapping
     public String create(@RequestBody String url) {
-        UrlValidator urlValidator = new UrlValidator(
-                new String[]{"http","https"}
-        );
+//        UrlValidator urlValidator = new UrlValidator(
+//                new String[]{"http","https"}
+//        );
 
-        if (urlValidator.isValid(url)) {
+     //   if (urlValidator.isValid(url)) {
             String id = Hashing.murmur3_32().hashString(url, StandardCharsets.UTF_8).toString();
             System.out.println("URl Id generated: "+ id);
             redisTemplate.opsForValue().set(id, url);
-            return null;
-        }
+            return id;
+       // }
 
-        throw new RuntimeException("URl Invalid" + url);
+        //throw new RuntimeException("URl Invalid" + url);
     }
 
 }
